@@ -1,0 +1,11 @@
+{
+  "name": "watermark-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:pSakowski/watermark-node.git",
+  "author": "Piotr Sakowski <psakowski1213@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "jimp": "0.6.4"
+  }
+}
