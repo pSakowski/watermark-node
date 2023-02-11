@@ -10,6 +10,8 @@ const addTextWatermarkToImage = async function(inputFile, outputFile, text) {
   const y = (image.bitmap.height - 32) / 2;
   image.print(font, x, y, text);
   await image.quality(100).writeAsync(outputFile);
+  console.log(`Watermarked image has been successfully created: ${outputFile}`);
+  startApp();
 };
 
 const addImageWatermarkToImage = async function(inputFile, outputFile, watermarkFile) {
@@ -22,21 +24,23 @@ const addImageWatermarkToImage = async function(inputFile, outputFile, watermark
     opacitySource: 0.7
   });
   await image.quality(100).writeAsync(outputFile);
+  console.log(`Watermarked image has been successfully created: ${outputFile}`);
+  startApp();
 };
 
 const prepareOutputFilename = (filename) => {
-  const [name, ext] = filename.split('.');
+  const [ name, ext ] = filename.split('.');
   return `${name}-with-watermark.${ext}`;
 };
 
 const startApp = async () => {
-
+  
   const answer = await inquirer.prompt([{
-      name: 'start',
-      message: 'Hi! Welcome to "Watermark manager". Copy your image files to `/img` folder. Then you\'ll be able to use them in the app. Are you ready?',
-      type: 'confirm'
-    }]);
-
+    name: 'start',
+    message: 'Hi! Welcome to "Watermark manager". Copy your image files to `/img` folder. Then you\'ll be able to use them in the app. Are you ready?',
+    type: 'confirm'
+  }]);
+  
   if(!answer.start) process.exit();
 
   const options = await inquirer.prompt([{
@@ -75,13 +79,14 @@ const startApp = async () => {
     }])
     options.watermarkImage = image.filename;
 
-    if (!fs.existsSync(`./img/${options.watermarkType}`)) {
-      console.log('Something went wrong... Try again');
+    if (!fs.existsSync(`./img/${options.watermarkImage}`)) {
+      console.log('Something went wrong. Please try again.');
       process.exit();
-    }
+  }
 
     addImageWatermarkToImage('./img/' + options.inputImage, './img/' + prepareOutputFilename(options.inputImage), './img/' + options.watermarkImage);
   }
+
 }
 
 startApp();
